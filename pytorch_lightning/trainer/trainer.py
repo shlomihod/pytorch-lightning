@@ -505,25 +505,25 @@ class Trainer(
         return results or 1
 
     def _set_wide_running_stage(self, stage):
-        model_ref = self.get_model()
+        # model_ref = self.get_model()
 
-        if stage is None:
-            self._running_stage = stage
-            model_ref.running_stage = stage
-            return
+        # if stage is None:
+        #     self._running_stage = stage
+        #     # model_ref.running_stage = stage
+        #     return
 
-        # todo: clean up this routing mess.
-        if self._running_stage == RunningStage.TESTING:
-            stage = RunningStage.TESTING
+        # # todo: clean up this routing mess.
+        # if self._running_stage == RunningStage.TESTING:
+        #     stage = RunningStage.TESTING
 
         # WARNING: With predicting,
         # trainer _running_state should be RunningStage.TESTING
         # however, the model running_stage should be RunningStage.PREDICTING or None
-        if model_ref is not None:
-            if self._predicting:
-                model_ref.running_stage = RunningStage.PREDICTING
-            else:
-                model_ref.running_stage = stage
+        # if model_ref is not None:
+        #     if self._predicting:
+        #         model_ref.running_stage = RunningStage.PREDICTING
+        #     else:
+        #         model_ref.running_stage = stage
 
         self._running_stage = stage
 
