@@ -189,3 +189,15 @@ def test_v1_4_0_deprecated_lightning_data_parallel():
         dp_model = LightningDataParallel(model, device_ids=[0])
     assert isinstance(dp_model, torch.nn.DataParallel)
     assert isinstance(dp_model.module, LightningParallelModule)
+
+
+def test_v1_4_0_deprecated_checkpoint_on(tmpdir):
+    class TestModel(BoringModel):
+        def training_step(self, batch, batch_idx):
+            self.log("val_loss", -batch_idx)
+            return super().training_step(batch, batch_idx)
+
+    trainer = Trainer(default_root_dir=tmpdir, checkpoint_callback=True, max_epochs=1)
+
+    with pytest.warns(DeprecationWarning, match=r"Relying on.*is deprecated in v1.2 and will be removed in v1.4"):
+        trainer.fit(TestModel())
